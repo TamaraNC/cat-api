@@ -42,9 +42,6 @@ function voteUp() {
     getVotes();
 }
 
-const upBtn = document.querySelector("#green-btn");
-upBtn.addEventListener("click", voteUp)
-
 function voteDown() {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -64,15 +61,16 @@ function voteDown() {
     getVotes();
 }
 
-const downBtn = document.querySelector("#red-btn");
-downBtn.addEventListener("click", voteDown)
-
 function getVotes() {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            console.log(xhr.response)
+            const image = document.querySelector("img");
+            let data = JSON.stringify({"image_id": image.id, "value": 0})
+            xhr.response[0].image_id = image.id;
+            console.log(xhr.response[0])
+
             }
         }
     xhr.open('GET', 'https://api.thecatapi.com/v1/votes');
@@ -95,6 +93,9 @@ const renderUpVotes = () => {
 
 }
 
+const upBtn = document.querySelector("#green-btn");
+upBtn.addEventListener("click", renderUpVotes)
+
 const renderDownVotes = () => {
     const downContainer = document.querySelector(".downvoted-container")
     const downImages = document.querySelector(".downvoted-images");
@@ -107,5 +108,8 @@ const renderDownVotes = () => {
     downImages.appendChild(imgContainer);
     downContainer.appendChild(downImages)
 }
+
+const downBtn = document.querySelector("#red-btn");
+downBtn.addEventListener("click", renderDownVotes)
 
 
