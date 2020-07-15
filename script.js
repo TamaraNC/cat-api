@@ -26,7 +26,6 @@ function voteUp() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             console.log(xhr.response)
             console.log(data)
-            renderUpVotes();
         }
     }
     xhr.open('POST', 'https://api.thecatapi.com/v1/votes', true);
@@ -34,6 +33,7 @@ function voteUp() {
     xhr.setRequestHeader('x-api-key', apiKey);
     const image = document.querySelector("img");
     let data = JSON.stringify({"image_id": image.id, "value": 1})
+    renderUpVotes();
     xhr.send(data);
 }
 
@@ -42,7 +42,8 @@ function voteDown() {
     xhr.responseType = 'json';
     xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            renderDownVotes();
+            console.log(xhr.response)
+            console.log(data)
         }
     }
     xhr.open('POST', 'https://api.thecatapi.com/v1/votes', true);
@@ -51,6 +52,8 @@ function voteDown() {
     const image = document.querySelector("img");
     let data = JSON.stringify({"image_id": image.id, "value": 0})
     xhr.send(data);
+    renderDownVotes();
+    getVotes()
 }
 
 function getVotes() {
@@ -61,6 +64,7 @@ function getVotes() {
             const image = document.querySelector("img");
             xhr.response[0].image_id = image.id;
             console.log(xhr.response[0])
+            return xhr.response[0];
             }
         }
     xhr.open('GET', 'https://api.thecatapi.com/v1/votes');
