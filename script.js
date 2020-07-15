@@ -1,7 +1,6 @@
 const url = 'https://api.thecatapi.com/v1/images/search?size=small';
 const apiKey = '6231d92a-e173-459d-b8ab-9bd899e43b58';
 
-
 //Get images from API
 const getImage =  () => {
     const xhr = new XMLHttpRequest();
