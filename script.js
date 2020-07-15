@@ -61,7 +61,6 @@ function getVotes() {
             const image = document.querySelector("img");
             xhr.response[0].image_id = image.id;
             console.log(xhr.response[0])
-
             }
         }
     xhr.open('GET', 'https://api.thecatapi.com/v1/votes');
