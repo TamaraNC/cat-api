@@ -11,6 +11,7 @@ const getImage =  () => {
             const image = document.querySelector("img");
             image.src = xhr.response[0].url;
             image.setAttribute("id",`${xhr.response[0].id}`);
+            getVotes()
         }
     }
     xhr.open('GET', url);
@@ -18,10 +19,6 @@ const getImage =  () => {
 }
 getImage();
 
-const buttons = document.querySelectorAll("button");
-buttons.forEach(button => {
-    button.addEventListener("click", getImage)
-})
 
 function voteUp() {
     const xhr = new XMLHttpRequest();
@@ -39,7 +36,6 @@ function voteUp() {
     const image = document.querySelector("img");
     let data = JSON.stringify({"image_id": image.id, "value": 1})
     xhr.send(data);
-    getVotes();
 }
 
 function voteDown() {
@@ -47,7 +43,6 @@ function voteDown() {
     xhr.responseType = 'json';
     xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-           
             renderDownVotes();
         }
     }
@@ -56,9 +51,7 @@ function voteDown() {
     xhr.setRequestHeader('x-api-key', apiKey);
     const image = document.querySelector("img");
     let data = JSON.stringify({"image_id": image.id, "value": 0})
-    console.log(data)
     xhr.send(data);
-    getVotes();
 }
 
 function getVotes() {
@@ -67,7 +60,6 @@ function getVotes() {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             const image = document.querySelector("img");
-            let data = JSON.stringify({"image_id": image.id, "value": 0})
             xhr.response[0].image_id = image.id;
             console.log(xhr.response[0])
 
@@ -90,11 +82,7 @@ const renderUpVotes = () => {
     imgContainer.appendChild(voted);
     upImages.appendChild(imgContainer);
     upContainer.appendChild(upImages)
-
 }
-
-const upBtn = document.querySelector("#green-btn");
-upBtn.addEventListener("click", renderUpVotes)
 
 const renderDownVotes = () => {
     const downContainer = document.querySelector(".downvoted-container")
@@ -109,7 +97,12 @@ const renderDownVotes = () => {
     downContainer.appendChild(downImages)
 }
 
+//Event listeners
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.addEventListener("click", getImage)
+})
+const upBtn = document.querySelector("#green-btn");
+upBtn.addEventListener("click", voteUp)
 const downBtn = document.querySelector("#red-btn");
-downBtn.addEventListener("click", renderDownVotes)
-
-
+downBtn.addEventListener("click", voteDown)
